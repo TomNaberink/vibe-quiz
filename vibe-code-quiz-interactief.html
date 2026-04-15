@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='nl'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Vibe-Code Quiz</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif;}
+body{height:100vh;background:radial-gradient(circle at 20% 20%, #2a3344 0%, transparent 40%),radial-gradient(circle at 80% 80%, #1e293b 0%, transparent 40%),#111827;display:flex;align-items:center;justify-content:center;color:#e5e7eb;}
+.quiz{width:700px;background:#1f2937;padding:40px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.5);} 
+.count{color:#9ca3af;margin-bottom:20px;}
+.q{font-size:20px;font-weight:600;margin-bottom:30px;line-height:1.4;}
+.answer{background:#111827;border-radius:14px;padding:18px;margin-bottom:15px;border:2px solid transparent;cursor:pointer;transition:.3s;}
+.answer:hover{border-color:#374151;}
+.correct{border-color:#22c55e;}
+.incorrect{border-color:#ef4444;}
+.feedback{margin-top:10px;font-size:14px;display:none;}
+.correct .feedback{display:block;color:#4ade80;}
+.incorrect .feedback{display:block;color:#f87171;}
+.primary{margin-top:20px;border:none;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#6366f1,#8b5cf6);color:#fff;cursor:pointer;float:right;}
+.score{font-size:22px;text-align:center;}
+</style>
+</head>
+<body>
+<div class='quiz'>
+<div class='count' id='count'></div>
+<div class='q' id='question'></div>
+<div id='answers'></div>
+<button class='primary' id='next'>Volgende</button>
+</div>
+<script>
+const quiz=[
+{q:'Wat is vibe-coding?',a:['Blind code kopiëren','Code genereren op basis van intentie','Alleen CSS schrijven','HTML vermijden'],c:1,e:'Vibe-coding betekent dat je werkt vanuit intentie i.p.v. syntax.'},
+{q:'Wat maakt vibe-coding krachtig in onderwijs?',a:['Sneller typen','Meer bugs','Snelle prototyping','Moeilijkere code'],c:2,e:'Je kunt snel ideeën testen zonder eerst alles te programmeren.'},
+{q:'Wat is de rol van AI bij vibe-coding?',a:['Compiler','Design tool','Co-creator','Firewall'],c:2,e:'AI fungeert als co-creator bij het bouwen van software.'}
+];
+let i=0,score=0,locked=false;
+function load(){locked=false;document.getElementById('answers').innerHTML='';document.getElementById('count').innerText=(i+1)+' / '+quiz.length;document.getElementById('question').innerText=quiz[i].q;quiz[i].a.forEach((t,idx)=>{let d=document.createElement('div');d.className='answer';d.innerHTML=t+"<div class='feedback'></div>";d.onclick=()=>choose(d,idx);document.getElementById('answers').appendChild(d);});}
+function choose(el,idx){if(locked)return;locked=true;let ans=document.querySelectorAll('.answer');ans.forEach((a,k)=>{if(k==quiz[i].c){a.classList.add('correct');a.querySelector('.feedback').innerText='✓ Correct - '+quiz[i].e;}else if(k==idx){a.classList.add('incorrect');a.querySelector('.feedback').innerText='✕ Helaas';}});if(idx==quiz[i].c)score++;}
+document.getElementById('next').onclick=()=>{i++;if(i<quiz.length){load();}else{document.querySelector('.quiz').innerHTML="<div class='score'>Score: "+score+" / "+quiz.length+"</div>";}};
+load();
+</script>
+</body>
+</html>
